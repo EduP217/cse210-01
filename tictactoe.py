@@ -11,17 +11,24 @@ def main():
         ask_user_choice(current_user)
         result = check_result(current_user)
         
-        user_has_win = result[1]
-        if user_has_win: 
-            break
-        
-        if result[0] == "X":
-            current_user = "Y"
+        if result[0]:
+            user_has_win = result[1]
+            if user_has_win: 
+                break
+            
+            if result[0] == "X":
+                current_user = "Y"
+            else:
+                current_user = "X"
         else:
-            current_user = "X"
+            current_user = result[0]
+            user_has_win = True
     
     display_table()
-    print(f"The user {current_user} has won.")
+    if current_user:
+        print(f"The user {current_user} has won.")
+    else:
+        print("It was a draw!")
     print("Good game. Thanks for playing!")
 
 # display_table():
@@ -52,7 +59,10 @@ def display_table():
 # process: get the user's choice and set it to the global dict
 def ask_user_choice(user):
     user_choice = int(input(f"{user}'s turn to choose a square (1-9): "))
-    tics[user_choice] = user
+    if user_choice not in tics:
+        tics[user_choice] = user
+    else:
+        print("Error - your choice has already been picked.")
 
 # check_result(user):
 # input: the user's code
@@ -66,31 +76,34 @@ def check_result(user):
         if toe == user:
             user_choices += str(tac)
     
-    if '159' in user_choices or '591' in user_choices or '951' in user_choices:
-        user_has_win = True
-    elif '915' in user_choices or '195' in user_choices or '519' in user_choices:
+    if '1' in user_choices and '2' in user_choices and '3' in user_choices:
         user_has_win = True
     
-    if '258' in user_choices or '582' in user_choices or '852' in user_choices:
-        user_has_win = True
-    elif '285' in user_choices or '528' in user_choices or '825' in user_choices:
+    if '4' in user_choices and '5' in user_choices and '6' in user_choices:
         user_has_win = True
     
-    if '357' in user_choices or '573' in user_choices or '753' in user_choices:
-        user_has_win = True
-    elif '375' in user_choices or '537' in user_choices or '735' in user_choices:
+    if '7' in user_choices and '8' in user_choices and '9' in user_choices:
         user_has_win = True
     
-    if '147' in user_choices or '471' in user_choices or '714' in user_choices:
+    if '1' in user_choices and '4' in user_choices and '7' in user_choices:
         user_has_win = True
-    elif '174' in user_choices or '417' in user_choices or '741' in user_choices:
+        
+    if '2' in user_choices and '5' in user_choices and '8' in user_choices:
+        user_has_win = True
+            
+    if '3' in user_choices and '6' in user_choices and '9' in user_choices:
+        user_has_win = True
+        
+    if '1' in user_choices and '5' in user_choices and '9' in user_choices:
         user_has_win = True
     
-    if '369' in user_choices or '693' in user_choices or '936' in user_choices:
-        user_has_win = True
-    elif '396' in user_choices or '639' in user_choices or '963' in user_choices:
+    if '3' in user_choices and '5' in user_choices and '7' in user_choices:
         user_has_win = True
 
+    if not user_has_win:
+        if len(tics) == 9:
+            return None, None
+        
     return user,user_has_win
     
 if __name__ == "__main__":
